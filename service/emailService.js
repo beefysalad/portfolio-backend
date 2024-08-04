@@ -10,12 +10,17 @@ const sendEmailService = async (req, res) => {
       text: `${message} - feedback sender ${name} ${email}`,
     };
     const emailResponse = await sendEmail(mailOptions);
-    if (emailResponse.messageId) {
+    if (emailResponse && emailResponse.messageId) {
       res.status(200).json({
         message: `Email sent successfully - ${emailResponse.messageId}`,
       });
+    } else {
+      res.status(500).json({
+        message: "Email sending failed without an error response.",
+      });
     }
   } catch (error) {
+    console.error("Error encountered");
     res.status(500).json({
       message: `Error encountered ${error}`,
     });
